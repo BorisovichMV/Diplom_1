@@ -1,56 +1,38 @@
-import org.junit.Assert;
 import org.junit.Test;
+import static org.junit.Assert.*;
+
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.runners.Parameterized;
 import praktikum.Bun;
-import praktikum.Burger;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(Parameterized.class)
 public class BunTest {
-    @Mock
-    Bun mockBun;
-    Bun realBun = new Bun("Булка", 5);
 
+    private final Bun bun;
+    private final String name;
+    private final float price;
 
-    @Test
-    public void getNameTest() {
-        mockBun.getName();
-        Mockito.verify(mockBun).getName();
+    public BunTest(String name, float price) {
+        this.bun = new Bun(name, price);
+        this.name = name;
+        this.price = price;
+    }
+
+    @Parameterized.Parameters
+    public static Object[][] getParameters() {
+        return new Object[][]{
+                { "White bun", 100.0f },
+                { "Sesame bun", 120.0f }
+        };
     }
 
     @Test
-    public void bunGetNameForReceipt() {
-        Burger burger = new Burger();
-        burger.setBuns(mockBun);
-        burger.getReceipt();
-        Mockito.verify(mockBun, Mockito.times(2)).getName();
+    public void testGetPrice() {
+        assertEquals(this.price, bun.getPrice(), 0.0f);
     }
 
     @Test
-    public void bunGetPriceForBurgerPriceTest() {
-        Burger burger = new Burger();
-        burger.setBuns(mockBun);
-        burger.getPrice();
-        Mockito.verify(mockBun).getPrice();
-    }
-
-    @Test
-    public void bunGetPriceForReceiptTest() {
-        Burger burger = new Burger();
-        burger.setBuns(mockBun);
-        burger.getReceipt();
-        Mockito.verify(mockBun).getPrice();
-    }
-
-    @Test
-    public void getRealNameTest() {
-        Assert.assertEquals("Булка", realBun.getName());
-    }
-
-    @Test
-    public void getRealPriceTest() {
-        Assert.assertEquals(5, realBun.getPrice(), 0.0);
+    public void testGetName() {
+        assertEquals(this.name, bun.getName());
     }
 }
